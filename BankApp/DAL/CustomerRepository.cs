@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,8 @@ using BankApp.Models;
 
 namespace BankApp.DAL
 {
-    public class CustomerRepository
+    // Need to implement IEnumerable for foreach looping over customers
+    public class CustomerRepository : IEnumerable<Customer>
     {
         private List<Customer> allCustomers;
 
@@ -24,8 +26,12 @@ namespace BankApp.DAL
 
         public Customer FindCustomer(string name)
         {
-            Customer result = null;
-            return result;
+            foreach (Customer cust in allCustomers) {
+                if (cust.Name == name) {
+                    return cust;
+                }
+            }
+            return null;
         }
 
 
@@ -33,6 +39,14 @@ namespace BankApp.DAL
         {
             Customer customerToDelete = FindCustomer(name);
             allCustomers.Remove(customerToDelete);
+        }
+
+        public IEnumerator<Customer> GetEnumerator() {
+            return allCustomers.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
     }
 }

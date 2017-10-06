@@ -10,8 +10,11 @@ namespace BankApp
 {
     class Program
     {
+        private static CustomerRepository cr;
+
         public static void Main(string[] args)
         {
+            cr = new CustomerRepository();
             ShowMainMenu();
             Account a = new Account();
             Customer c = new Customer(a);
@@ -29,9 +32,21 @@ namespace BankApp
             Console.WriteLine("2: Show all customers");
             Console.WriteLine("--------------------------------------");
             String command = Console.ReadLine();
-            if (command == "1")
-            {
-                ShowCreateCustomer();
+            switch (command) {
+                case "1":
+                    ShowCreateCustomer();
+                    break;
+                case "2":
+                    PrintCustomers();
+                    break;
+                case "quit":
+                case "q":
+                case "exit":
+                    Environment.Exit(0);
+                    break;
+                default:
+                    ShowMainMenu();
+                    break;
             }
         }
 
@@ -39,8 +54,21 @@ namespace BankApp
         {
             Console.WriteLine("--- Create a customer ---");
             Console.Write("please enter your name: ");
-            string name = Console.ReadLine();
+            //string name = Console.ReadLine();
+
             //create customer
+            Customer customer = new Customer(new Account());
+            customer.Name = Console.ReadLine();
+            cr.SaveCustomer(customer);
+            Console.WriteLine("New customer created!\n");
+
+            ShowMainMenu();
+        }
+
+        public static void PrintCustomers() {
+            foreach (Customer cust in cr) {
+                Console.WriteLine($"Name:\t\t{cust.Name}\nBalance:\t{cust.TheAccount.Balance}\n");
+            }
 
             ShowMainMenu();
         }

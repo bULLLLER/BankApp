@@ -8,6 +8,7 @@ namespace BankApp.Models
 {
     public class Customer
     {
+        // No name in constructor? :(
         public Customer(Account myAccount)
         {
             TheAccount = myAccount;
